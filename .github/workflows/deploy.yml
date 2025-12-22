@@ -48,3 +48,50 @@ jobs:
                     --build-arg NEXT_PUBLIC_BASE_URL_CUSTOMERS=${{ secrets.NEXT_PUBLIC_API_URL }}/customers \
                     -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./frontend
                   docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+        - name: Deploy via SSH
+          uses: appleboy/ssh-action@v0.1.10
+          with:
+              host: ${{ secrets.EC2_HOST }}
+              username: ubuntu
+              key: ${{ secrets.EC2_SSH_KEY }}
+              script: |
+                  # Đăng nhập ECR trên EC2
+                  aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}
+
+                  # Kéo ảnh mới về
+                  docker pull ${{ secrets.ECR_REGISTRY }}/ctm-backend:latest
+                  docker pull ${{ secrets.ECR_REGISTRY }}/ctm-frontend:latest
+
+                  # Tạo file docker-compose.yml ngay trên server (Cách đơn giản nhất)
+                  cat <<EOF > docker-compose.yml
+                  version: '3.8'
+                  services:
+                    backend:
+                      image: ${{ secrets.ECR_REGISTRY }}/ctm-backend:latest
+                      restart: always
+                      ports:
+                        - "13000:3000"
+                      environment:
+                        MYSQL_HOST: ${{ secrets.RDS_ENDPOINT }} # Bạn cần thêm Secret này sau
+                        MYSQL_USER: admin
+                        MYSQL_PASSWORD: ${{ secrets.RDS_PASSWORD }} # Bạn cần thêm Secret này sau
+                        MYSQL_DATABASE: ctm
+                        PORT: 3000
+                        # Thêm các biến môi trường khác của backend vào đây...
+
+                    frontend:
+                      image: ${{ secrets.ECR_REGISTRY }}/ctm-frontend:latest
+                      restart: always
+                      ports:
+                        - "15173:5173"
+                  EOF
+
+                  # Chạy container mới
+                  docker-compose up -d
+
+                  # Dọn dẹp ảnh cũ cho đỡ tốn dung lượng
+                  docker system prune -f
