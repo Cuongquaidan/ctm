@@ -26,7 +26,7 @@ jobs:
             - name: Build & Push Backend
               env:
                   ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-                  ECR_REPOSITORY: ctm-backend
+                  ECR_REPOSITORY: self/ctm-backend
                   IMAGE_TAG: latest
               run: |
                   docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./backend
@@ -35,7 +35,7 @@ jobs:
             - name: Build & Push Frontend
               env:
                   ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-                  ECR_REPOSITORY: ctm-frontend
+                  ECR_REPOSITORY: self/ctm-frontend
                   IMAGE_TAG: latest
               run: |
                   docker build \
@@ -58,14 +58,14 @@ jobs:
                   script: |
                       aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}
 
-                      docker pull ${{ secrets.ECR_REGISTRY }}/ctm-backend:latest
-                      docker pull ${{ secrets.ECR_REGISTRY }}/ctm-frontend:latest
+                      docker pull ${{ secrets.ECR_REGISTRY }}/self/ctm-backend:latest
+                      docker pull ${{ secrets.ECR_REGISTRY }}/self/ctm-frontend:latest
 
                       cat <<EOF > docker-compose.yml
                       version: '3.8'
                       services:
                         backend:
-                          image: ${{ secrets.ECR_REGISTRY }}/ctm-backend:latest
+                          image: ${{ secrets.ECR_REGISTRY }}/self/ctm-backend:latest
                           restart: always
                           ports:
                             - "13000:3000"
@@ -77,7 +77,7 @@ jobs:
                             PORT: 3000
 
                         frontend:
-                          image: ${{ secrets.ECR_REGISTRY }}/ctm-frontend:latest
+                          image: ${{ secrets.ECR_REGISTRY }}/self/ctm-frontend:latest
                           restart: always
                           ports:
                             - "15173:5173"
