@@ -1,0 +1,16 @@
+build/*
+!build/README.md
+node_modules
+package-lock.json
+.env
+uploads/*
+!uploads/README.md
+public/sitemap.xml
+public/static/*
+!public/static/README.md
+logs/*
+!logs/README.md
+.prettierrc
+eslint.config.ts
+jest.config.js
+__test__

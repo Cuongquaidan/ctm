@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///C:/ha%20manh%20cuong/work/ctm/frontend/src/components/ui/LoadingSpinner.tsx"],"sourcesContent":["import React from 'react'\n\nfunction LoadingSpinner() {\n  return (\n    <div className=\"fullpage-loader\">\n      <span></span>\n      <span></span>\n      <span></span>\n      <span></span>\n      <span></span>\n      <span></span>\n    </div>\n  )\n}\n\nexport default LoadingSpinner"],"names":[],"mappings":";;;;;;AAEA,SAAS;IACP,qBACE,8OAAC;QAAI,WAAU;;0BACb,8OAAC;;;;;0BACD,8OAAC;;;;;0BACD,8OAAC;;;;;0BACD,8OAAC;;;;;0BACD,8OAAC;;;;;0BACD,8OAAC;;;;;;;;;;;AAGP;uCAEe","debugId":null}},
-    {"offset": {"line": 56, "column": 0}, "map": {"version":3,"sources":["file:///C:/ha%20manh%20cuong/work/ctm/frontend/src/app/loading.tsx"],"sourcesContent":["import BoxSpinner from '@/components/ui/BoxSpinner'\r\nimport LoadingSpinner from '@/components/ui/LoadingSpinner'\r\nimport React from 'react'\r\n\r\nfunction loading() {\r\n  return (\r\n    <>\r\n      {/* <BoxSpinner></BoxSpinner> */}\r\n      <LoadingSpinner></LoadingSpinner>\r\n    </>\r\n  )\r\n}\r\n\r\nexport default loading"],"names":[],"mappings":";;;;;AACA;;;AAGA,SAAS;IACP,qBACE;kBAEE,cAAA,8OAAC,qJAAc;;;;;;AAGrB;uCAEe","debugId":null}}]
-}
