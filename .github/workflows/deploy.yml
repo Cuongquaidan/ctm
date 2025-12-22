@@ -3,10 +3,9 @@ name: Deploy to AWS EC2
 on:
     push:
         branches:
-            - main # Chỉ chạy khi code được push vào nhánh main
+            - main
 
 jobs:
-    # 1. Build và Đẩy ảnh lên ECR
     build-and-push:
         runs-on: ubuntu-latest
         steps:
@@ -18,13 +17,12 @@ jobs:
               with:
                   aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
                   aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-                  aws-region: us-east-1 # Sửa lại nếu bạn chọn region khác
+                  aws-region: us-east-1
 
             - name: Login to Amazon ECR
               id: login-ecr
               uses: aws-actions/amazon-ecr-login@v1
 
-            # --- BUILD BACKEND ---
             - name: Build & Push Backend
               env:
                   ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
@@ -34,64 +32,56 @@ jobs:
                   docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./backend
                   docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-            # --- BUILD FRONTEND ---
             - name: Build & Push Frontend
               env:
                   ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
                   ECR_REPOSITORY: ctm-frontend
                   IMAGE_TAG: latest
               run: |
-                  # Lưu ý: Truyền biến API URL vào lúc build (Build Argument)
                   docker build \
                     --build-arg NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }} \
                     --build-arg NEXT_PUBLIC_BASE_URL_SITES=${{ secrets.NEXT_PUBLIC_API_URL }} \
                     --build-arg NEXT_PUBLIC_BASE_URL_CUSTOMERS=${{ secrets.NEXT_PUBLIC_API_URL }}/customers \
                     -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./frontend
                   docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-deploy:
-    needs: build-and-push
-    runs-on: ubuntu-latest
-    steps:
-        - name: Deploy via SSH
-          uses: appleboy/ssh-action@v0.1.10
-          with:
-              host: ${{ secrets.EC2_HOST }}
-              username: ubuntu
-              key: ${{ secrets.EC2_SSH_KEY }}
-              script: |
-                  # Đăng nhập ECR trên EC2
-                  aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}
 
-                  # Kéo ảnh mới về
-                  docker pull ${{ secrets.ECR_REGISTRY }}/ctm-backend:latest
-                  docker pull ${{ secrets.ECR_REGISTRY }}/ctm-frontend:latest
+    deploy:
+        needs: build-and-push
+        runs-on: ubuntu-latest
+        steps:
+            - name: Deploy via SSH
+              uses: appleboy/ssh-action@v0.1.10
+              with:
+                  host: ${{ secrets.EC2_HOST }}
+                  username: ubuntu
+                  key: ${{ secrets.EC2_SSH_KEY }}
+                  script: |
+                      aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}
 
-                  # Tạo file docker-compose.yml ngay trên server (Cách đơn giản nhất)
-                  cat <<EOF > docker-compose.yml
-                  version: '3.8'
-                  services:
-                    backend:
-                      image: ${{ secrets.ECR_REGISTRY }}/ctm-backend:latest
-                      restart: always
-                      ports:
-                        - "13000:3000"
-                      environment:
-                        MYSQL_HOST: ${{ secrets.RDS_ENDPOINT }} # Bạn cần thêm Secret này sau
-                        MYSQL_USER: admin
-                        MYSQL_PASSWORD: ${{ secrets.RDS_PASSWORD }} # Bạn cần thêm Secret này sau
-                        MYSQL_DATABASE: ctm
-                        PORT: 3000
-                        # Thêm các biến môi trường khác của backend vào đây...
+                      docker pull ${{ secrets.ECR_REGISTRY }}/ctm-backend:latest
+                      docker pull ${{ secrets.ECR_REGISTRY }}/ctm-frontend:latest
 
-                    frontend:
-                      image: ${{ secrets.ECR_REGISTRY }}/ctm-frontend:latest
-                      restart: always
-                      ports:
-                        - "15173:5173"
-                  EOF
+                      cat <<EOF > docker-compose.yml
+                      version: '3.8'
+                      services:
+                        backend:
+                          image: ${{ secrets.ECR_REGISTRY }}/ctm-backend:latest
+                          restart: always
+                          ports:
+                            - "13000:3000"
+                          environment:
+                            MYSQL_HOST: ${{ secrets.RDS_ENDPOINT }}
+                            MYSQL_USER: admin
+                            MYSQL_PASSWORD: ${{ secrets.RDS_PASSWORD }}
+                            MYSQL_DATABASE: ctm
+                            PORT: 3000
 
-                  # Chạy container mới
-                  docker-compose up -d
+                        frontend:
+                          image: ${{ secrets.ECR_REGISTRY }}/ctm-frontend:latest
+                          restart: always
+                          ports:
+                            - "15173:5173"
+                      EOF
 
-                  # Dọn dẹp ảnh cũ cho đỡ tốn dung lượng
-                  docker system prune -f
+                      docker-compose up -d
+                      docker system prune -f
