@@ -56,7 +56,7 @@ jobs:
                   username: ubuntu
                   key: ${{ secrets.EC2_SSH_KEY }}
                   script: |
-                      aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}
+                      aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}
 
                       docker pull ${{ secrets.ECR_REGISTRY }}/self/ctm-backend:latest
                       docker pull ${{ secrets.ECR_REGISTRY }}/self/ctm-frontend:latest
