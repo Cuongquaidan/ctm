@@ -1,0 +1,50 @@
+name: Deploy to AWS EC2
+
+on:
+    push:
+        branches:
+            - main # Chỉ chạy khi code được push vào nhánh main
+
+jobs:
+    # 1. Build và Đẩy ảnh lên ECR
+    build-and-push:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Configure AWS credentials
+              uses: aws-actions/configure-aws-credentials@v2
+              with:
+                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  aws-region: us-east-1 # Sửa lại nếu bạn chọn region khác
+
+            - name: Login to Amazon ECR
+              id: login-ecr
+              uses: aws-actions/amazon-ecr-login@v1
+
+            # --- BUILD BACKEND ---
+            - name: Build & Push Backend
+              env:
+                  ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+                  ECR_REPOSITORY: ctm-backend
+                  IMAGE_TAG: latest
+              run: |
+                  docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./backend
+                  docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+            # --- BUILD FRONTEND ---
+            - name: Build & Push Frontend
+              env:
+                  ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+                  ECR_REPOSITORY: ctm-frontend
+                  IMAGE_TAG: latest
+              run: |
+                  # Lưu ý: Truyền biến API URL vào lúc build (Build Argument)
+                  docker build \
+                    --build-arg NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }} \
+                    --build-arg NEXT_PUBLIC_BASE_URL_SITES=${{ secrets.NEXT_PUBLIC_API_URL }} \
+                    --build-arg NEXT_PUBLIC_BASE_URL_CUSTOMERS=${{ secrets.NEXT_PUBLIC_API_URL }}/customers \
+                    -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./frontend
+                  docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
