@@ -56,11 +56,22 @@ jobs:
                   username: ubuntu
                   key: ${{ secrets.EC2_SSH_KEY }}
                   script: |
+                      set -e
+
+                      echo "=== Checking Docker ==="
+                      docker --version || { echo "Docker not installed!"; exit 1; }
+
+                      echo "=== Checking Docker Compose ==="
+                      docker compose version || docker-compose --version || { echo "Docker Compose not installed!"; exit 1; }
+
+                      echo "=== Login to ECR ==="
                       aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}
 
+                      echo "=== Pulling images ==="
                       docker pull ${{ secrets.ECR_REGISTRY }}/self/ctm-backend:latest
                       docker pull ${{ secrets.ECR_REGISTRY }}/self/ctm-frontend:latest
 
+                      echo "=== Creating docker-compose.yml ==="
                       cat <<EOF > docker-compose.yml
                       version: '3.8'
                       services:
@@ -83,5 +94,14 @@ jobs:
                             - "15173:5173"
                       EOF
 
-                      docker-compose up -d
+                      echo "=== Stopping old containers ==="
+                      docker compose down || docker-compose down || true
+
+                      echo "=== Starting new containers ==="
+                      docker compose up -d || docker-compose up -d
+
+                      echo "=== Listing running containers ==="
+                      docker ps
+
+                      echo "=== Cleanup ==="
                       docker system prune -f
