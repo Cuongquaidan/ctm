@@ -1,0 +1,70 @@
+services:
+  # 1. Database MySQL
+  db:
+    image: mysql:8.0
+    container_name: ctm_mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: ctm
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  # 2. Backend Node.js
+  backend:
+    build: ./backend
+    container_name: ctm_backend
+    restart: always
+    ports:
+      - "13000:3000" # Máy thật 13000 -> Container 3000
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - db
+    environment:
+      MYSQL_HOST: db    
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root 
+      MYSQL_DATABASE: ctm 
+      MYSQL_PORT: 3306
+      PORT: 3000 # Cổng nội bộ container
+      
+      # Cấu hình URL trả về cho client (dùng localhost vì browser hiểu localhost)
+      APP_URL: "http://localhost:15173,https://api-tmdt.systems.com.vn"
+      ADMIN_URL: "http://localhost:13000/adcp"
+      CUSTOMERS_URL: "http://localhost:13000/customers"
+      SITES_URL: "http://localhost:13000"
+      STATIC_URL: "http://localhost:13000/static"
+      UPLOADS_URL: "http://localhost:13000/uploads"
+      CALLBACK_URL: "http://localhost:13000/googleCallback"
+      CALLBACK_URL_CUSTOMERS: "http://localhost:13000/customers/googleCallback"
+
+  # 3. Frontend Next.js
+  frontend:
+    build: 
+      context: ./frontend
+      # --- ĐÂY LÀ CHỖ SỬA QUAN TRỌNG NHẤT ---
+      # Dùng host.docker.internal để build không bị lỗi kết nối
+      args:
+        NEXT_PUBLIC_API_URL: http://host.docker.internal:13000
+        NEXT_PUBLIC_BASE_URL_SITES: http://host.docker.internal:13000
+        NEXT_PUBLIC_BASE_URL_CUSTOMERS: http://host.docker.internal:13000/customers
+    
+    container_name: ctm_frontend
+    restart: always
+    ports:
+      - "15173:5173"
+    env_file:
+      - ./frontend/.env
+    depends_on:
+      - backend
+    # Environment lúc chạy (Runtime)
+    environment:
+      NEXT_PUBLIC_API_URL: http://host.docker.internal:13000
+      NEXT_PUBLIC_BASE_URL_SITES: http://host.docker.internal:13000
+      NEXT_PUBLIC_BASE_URL_CUSTOMERS: http://host.docker.internal:13000/customers
+
+volumes:
+  db_data:

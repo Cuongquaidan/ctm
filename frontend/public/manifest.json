@@ -1,0 +1,39 @@
+{
+    "short_name": "Shop Bán Hàng",
+    "name": "Shop Bán Hàng",
+    "icons": [{
+        "src": "http://local.banhang.hnn.vn/manifest/logo192x192.png",
+        "type": "image/png",
+        "sizes": "192x192",
+        "purpose": "any maskable"
+    }, {
+        "src": "http://local.banhang.hnn.vn/manifest/logo512x512.png",
+        "type": "image/png",
+        "sizes": "512x512",
+        "purpose": "any maskable"
+    }],
+    "start_url": "http://local.banhang.hnn.vn/",
+    "background_color": "#009943",
+    "display": "standalone",
+    "scope": "/",
+    "theme_color": "#009943",
+    "shortcuts": [{
+        "name": "Shop Bán Hàng",
+        "short_name": "Shop Bán Hàng",
+        "description": "Shop Bán Hàng",
+        "url": "/",
+        "icons": [{
+            "src": "http://local.banhang.hnn.vn/manifest/logo192x192.png",
+            "sizes": "192x192"
+        }, {
+            "src": "http://local.banhang.hnn.vn/manifest/logo512x512.png",
+            "sizes": "512x512"
+        }]
+    }],
+    "description": "Shop Bán Hàng",
+    "screenshots": [{
+        "src": "http://local.banhang.hnn.vn/manifest/screenshots.png",
+        "type": "image/png",
+        "sizes": "1366x2939"
+    }]
+}

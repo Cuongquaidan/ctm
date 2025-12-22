@@ -1,0 +1,7 @@
+:root {
+    --font-body: 'Barlow', sans-serif;
+    --theme-color: #009943;
+    --theme-color-rgb: 0, 153, 67;
+    --theme-color1: #72BF44;
+    --theme-color2: linear-gradient(90.56deg, var(--theme-color1) 8.46%, var(--theme-color) 62.97%)
+}

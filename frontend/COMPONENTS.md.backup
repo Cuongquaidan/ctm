@@ -1,0 +1,847 @@
+# Tài liệu Components - CTM E-commerce Platform
+
+## 📋 Mục lục
+
+-   [Tổng quan Architecture](#tổng-quan-architecture)
+-   [Features Components](#features-components)
+-   [UI Components](#ui-components)
+-   [Component Versions](#component-versions)
+-   [Best Practices](#best-practices)
+
+---
+
+## 🏗️ Tổng quan Architecture
+
+### Component Organization
+
+```
+src/components/
+├── features/          # Feature-specific components
+│   ├── auth/         # Authentication
+│   ├── banner/       # Banners & sliders
+│   ├── breadcrumb/   # Breadcrumb navigation
+│   ├── cart/         # Shopping cart
+│   ├── category/     # Category menus
+│   ├── dashboard/    # Dashboard components
+│   ├── footer/       # Footer variants
+│   ├── header/       # Header & navigation
+│   ├── help/         # Help & FAQ
+│   ├── image/        # Illustration images
+│   ├── mobile/       # Mobile-specific
+│   ├── modal/        # Modal dialogs
+│   ├── news/         # News & blog
+│   ├── notification/ # Notifications
+│   ├── product/      # Product displays
+│   │   ├── components/  # Product sub-components
+│   │   ├── filter/      # Product filters
+│   │   ├── item/        # Product card variants
+│   │   ├── section/     # Product sections
+│   │   └── tab/         # Product tabs
+│   ├── profile/      # User profile
+│   ├── provider/     # Context providers
+│   ├── purchase/     # Orders & checkout
+│   ├── review/       # Reviews & ratings
+│   ├── sidebar/      # Sidebars
+│   ├── store/        # Store pages
+│   │   └── tab/      # Store tabs
+│   └── voucher/      # Vouchers & promotions
+├── layout/           # Layout components
+│   └── storeAccount/ # Store account layouts
+└── ui/               # Reusable UI primitives
+    ├── badge/        # Badge components
+    ├── button/       # Button variants
+    └── icons/        # Icon components
+```
+
+### Naming Conventions
+
+-   **Base components**: `ComponentName.tsx` (e.g., `VerticalProduct.tsx`)
+-   **V2 variants**: `ComponentNameV2.tsx` (improved UI/animations)
+-   **V3 variants**: `ComponentNameV3.tsx` (URL state + SEO optimized)
+-   **Client components**: `ComponentName.client.tsx` (client-side logic separation)
+-   **Server components**: No suffix, async function (default in Next.js 13+)
+
+### Version Evolution
+
+| Version | Focus               | Key Features                                 |
+| ------- | ------------------- | -------------------------------------------- |
+| **V1**  | Basic functionality | Standard UI, local state                     |
+| **V2**  | Enhanced UX         | Hover effects, smooth animations, responsive |
+| **V3**  | SEO & Performance   | URL state management, server/client split    |
+
+---
+
+## 🎯 Features Components
+
+### 🔐 Authentication (`features/auth`)
+
+Components xử lý đăng nhập, đăng ký và quản lý tài khoản.
+
+#### Customer Auth
+
+-   **`LoginBox`**: Form đăng nhập với phone/password, captcha, remember me
+-   **`RegisterBox`**: Form đăng ký với phone, password, referral code, captcha
+-   **`ForgotPasswordBox`**: Form khôi phục mật khẩu với phone và captcha
+
+#### Store Auth
+
+-   **`StoreLoginBox`**: Form đăng nhập dành cho cửa hàng
+-   **`StoreRegisterBox`**: Form đăng ký cửa hàng
+-   **`StoreForgotPasswordBox`**: Form quên mật khẩu cửa hàng
+
+#### Shared Components
+
+-   **`CustomInput`**: Input field tùy chỉnh với validation, error message, required field
+
+---
+
+### 🎨 Banner (`features/banner`)
+
+Hiển thị banner quảng cáo và slider.
+
+-   **`Banner1` → `Banner16`**: Banner tĩnh cho các vị trí khác nhau
+-   **`BannerSlider`**: Slider 4 banner với animation ngang
+-   **`BannerHoverSectionV2`**: Banner slider với hover effect
+-   **`BannerSliderPaginationV2`**: Banner auto-play với pagination dots
+-   **`CustomerReview`**: Section đánh giá khách hàng
+
+---
+
+### 🍞 Breadcrumb (`features/breadcrumb`)
+
+-   **`BreadcrumbBackToHome`**: Breadcrumb đơn giản với nút back to home
+
+---
+
+### 🛒 Cart (`features/cart`)
+
+Quản lý giỏ hàng.
+
+#### Cart Display
+
+-   **`CartHeader`**: Header tổng với số lượng sản phẩm, nút xóa tất cả
+-   **`CartTable`**: Bảng hiển thị sản phẩm theo store
+-   **`CartTableHeader`**: Header bảng với checkbox chọn tất cả
+-   **`CartTableBody`**: Body chứa danh sách CartTableItem
+-   **`CartTableItem`**: Dòng sản phẩm với checkbox, hình, tên, giá, số lượng (+/-), xóa
+-   **`CartTableFooter`**: Footer hiển thị tổng tiền store
+-   **`CartBoxHover`**: Dropdown hover mini cart preview
+
+#### Cart Actions
+
+-   **`CartBoxAddress`**: Box chọn địa chỉ giao hàng
+-   **`CartBoxVoucher`**: Box nhập/chọn voucher
+-   **`CartBoxSummary`**: Box tổng kết: tạm tính, giảm giá, ship, tổng, nút đặt hàng
+-   **`GroupCartAction`**: Quantity selector với nút thêm giỏ (có cart state management)
+
+---
+
+### 📁 Category (`features/category`)
+
+Danh mục sản phẩm.
+
+#### Vertical Menu (Sidebar)
+
+-   **`CategoryMenu`**: Menu dọc bên trái với async data fetching
+-   **`CategoryMenuItem`**: Item menu với image, name, link
+
+#### Horizontal Menu (Header)
+
+-   **`CategoryMenuHorizontal`**: Container horizontal dropdown
+-   **`HorizontalCategoryButton`**: Nút trigger "All Categories"
+-   **`HorizontalCategoryDropdown`**: Dropdown container với title và close
+-   **`HorizontalCategoryList`**: Render tất cả horizontal items
+-   **`HorizontalCategoryItem`**: Item với icon, name, subcategories hover
+    -   Main link: `/category/{slug}`
+    -   Sub link: `/category/{slug}/{subslug}`
+
+#### Search & Filter
+
+-   **`SearchByCategory`**: Section tìm kiếm với filter và grid
+-   **`SearchByCategoryV2`**: V2 với CustomSectionV2
+-   **`SearchByCategoryHasAction`**: Variant có action buttons
+-   **`SearchByCategoryHasActionV2`**: V2 với Swiper navigation
+-   **`SearchCategoryItem`**: Item trong search results
+-   **`CategoryFilterItem`**: Radio filter theo category
+-   **`SliderCategory`**: Category slider
+
+---
+
+### 📊 Dashboard (`features/dashboard`)
+
+-   **`DashboardItem`**: Item trong dashboard với thống kê
+
+---
+
+### 🖼️ Image (`features/image`)
+
+Ảnh minh họa cho auth pages.
+
+-   **`LoginImg`**: Ảnh trang login
+-   **`RegisterImg`**: Ảnh trang đăng ký
+-   **`ForgotPasswordImg`**: Ảnh quên mật khẩu
+-   **`StoreLoginImg`**: Ảnh login cửa hàng
+-   **`StoreRegisterImg`**: Ảnh đăng ký cửa hàng
+-   **`StoreForgotPasswordImg`**: Ảnh quên mật khẩu cửa hàng
+
+---
+
+### 🔔 Notification (`features/notification`)
+
+-   **`NotificationItem`**: Card thông báo với icon, tiêu đề, nội dung, thời gian
+-   **`NotificationHoverSection`**: Dropdown hover với 3 tab (Tất cả/Cá nhân/Khuyến mãi)
+-   **`NotificationHoverItem`**: Item trong dropdown
+-   **`TimerNotification`**: Toast notification tự động hiện/ẩn
+-   **`TimerNotifications`**: Manager cho multiple toast notifications
+
+---
+
+### 🛍️ Product (`features/product`)
+
+#### Product Components (`product/components`)
+
+-   **`BoxPrice`**: Hiển thị giá (giá gốc + giá giảm)
+-   **`BoxOption`**: Chọn option (size, màu...)
+-   **`Box2Option`**: 2 action buttons
+-   **`Box3Option`**: 3 action buttons (xem nhanh, so sánh, wishlist)
+-   **`Box4Option`**: 4 action buttons
+-   **`CustomRating`**: Rating sao và số lượng đánh giá
+-   **`ProductInfo`**: Thông tin chi tiết, giá, số lượng, nút mua
+-   **`SlickSliderImages`**: Slider ảnh với zoom 2x, magnifier, gallery thumbnails
+-   **`SlickSliderImagesVIP`**: VIP slider variant
+-   **`Sticky`**: Sticky product info khi scroll
+-   **`VerticalProductButtonAdd`**: Nút thêm giỏ hàng V1
+-   **`VerticalProductButtonAddV2`**: V2 với animation cải tiến
+-   **`VerticalProductButtonAddV3`**: V3 với cart state management đầy đủ
+
+#### Product Items (`product/item`)
+
+##### V1 Items
+
+-   **`VerticalProduct`**: Card dọc cơ bản
+-   **`HorizontalProduct`**: Card ngang cơ bản
+-   **`ListItem`**: Card dạng list
+
+##### V2 Items (Enhanced UI)
+
+-   **`VerticalProductHover`**: Card dọc với hover effect
+-   **`VerticalProductHoverV2`**: V2 variant với animation mượt hơn
+-   **`HorizontalProductNoAction`**: Card ngang tối giản
+-   **`HorizontalProductBox4Action`**: Card ngang với 4 actions
+-   **`SimpleVerticalProductHover`**: Simplified vertical với hover
+-   **`SimpleDealHoverItem`**: Deal item với hover
+
+##### V3 Items (Latest)
+
+-   **`VerticalProductHoverV3`**: V3 với URL state support
+-   **`VerticalProduct2Actions`**: Card với 2 action buttons
+-   **`BookItem`**: Card sách
+-   **`DigitalProduct`**: Card sản phẩm digital
+-   **`DealHasCartButtonItem`**: Deal item với cart button
+
+#### Product Sections (`product/section`)
+
+##### V1 Sections
+
+-   **`VerticalNItems`**: Section N items vertical
+-   **`HorizontalItemSection`**: Section horizontal items
+-   **`HorizontalItemNoActionSection`**: Horizontal không action
+-   **`DealSection`**: Section deal
+
+##### V2 Sections (Server/Client Split)
+
+-   **`VerticalNItemV2`**: V2 với server component
+-   **`VerticalNItemV2.client`**: Client logic
+-   **`HorizontalNItemsSectionV2`**: Horizontal N items V2
+-   **`HorizontalNItemsSectionV2.client`**: Client component
+-   **`HorizontalNItems2ActionsSection`**: 2 actions variant
+-   **`HorizontalNItems4ActionsSection`**: 4 actions variant
+-   **`VerticalProductHoverSectionV2`**: Vertical hover section
+-   **`VerticalProductHoverSectionV2.client`**: Client component
+-   **`VerticalBookProductHoverSectionV2`**: Book section V2
+-   **`SimpleVerticalProductHoverSectionV2`**: Simplified vertical V2
+-   **`SimpleDealHoverV2`**: Simple deal hover V2
+-   **`DealHasCartButtonSectionV2`**: Deal với cart button
+-   **`RelatedProductSectionV2`**: Sản phẩm liên quan V2
+
+##### V3 Sections (URL State + SEO)
+
+-   **`VerticalProductHoverSectionV3`**: V3 với URL filtering
+-   **`VerticalProductHoverSectionV3.client`**: Client logic
+-   **`Vertical3ActionSectionV3`**: 3 actions với URL state
+-   **`VerticalDigitalSectionV3`**: Digital products V3
+-   **`AllProductsVertical2Action2ItemV3`**: All products với 2 actions
+
+##### Other Sections
+
+-   **`VerticalProductWishList`**: Wishlist grid
+
+#### Product Filter (`product/filter`)
+
+-   **`FilterBox`**: Box chứa tất cả filter
+-   **`CategoryFilterItem`**: Filter theo category
+-   **`FilterPriceRangeItem`**: Filter theo khoảng giá
+-   **`FilterRatingItem`**: Filter theo rating
+-   **`FilterSelectedItem`**: Hiển thị filter đã chọn
+
+#### Product Tab (`product/tab`)
+
+-   **`TabWrapper`**: Wrapper cho tabs
+-   **`ReviewTab`**: Tab đánh giá
+-   **`ProductDescriptionTab`**: Tab mô tả
+-   **`ProductInfoDetailTab`**: Tab thông tin chi tiết
+
+---
+
+### 👤 Profile (`features/profile`)
+
+-   **`AddressItem`**: Card địa chỉ với tên, phone, địa chỉ, nút sửa/xóa/mặc định
+
+---
+
+### 🧾 Purchase (`features/purchase`)
+
+Components quản lý quy trình mua hàng từ checkout đến theo dõi đơn hàng.
+
+#### Purchase Table (Main)
+
+-   **`PurchaseTable`**: Container chính hiển thị đơn hàng với ServiceBox
+-   **`PurchaseTableHeader`**: Header với thông tin cửa hàng (store name, count)
+-   **`PurchaseCartItem`**: Dòng sản phẩm trong bảng đơn hàng
+
+#### Service Shipping
+
+-   **`ServiceBox`**: (Client Component) Box chọn dịch vụ vận chuyển
+    -   Fetch data với `getServiceShipping()` trong `useEffect`
+    -   State: service (id, name, especial, items)
+    -   Loading state với `spinner-xs` class
+    -   Hiển thị danh sách `ServiceBoxItem` hoặc message đặc biệt
+-   **`ServiceBoxItem`**: Radio button item cho service
+    -   Props: `item: ServiceItem`
+    -   Hiển thị: description, price (formatted)
+    -   Input: radio với name={item.name}, class="cbserviceId"
+
+#### Checkout
+
+-   **`CheckoutItem`**: Item sản phẩm trong trang checkout
+-   **`CheckoutSummary`**: Tổng kết giá trị đơn hàng
+-   **`PaymentOption`**: Radio group chọn phương thức thanh toán
+-   **`PaymentMethod`**: Hiển thị phương thức thanh toán đã chọn
+-   **`DeliveryOption`**: Chọn phương thức giao hàng
+-   **`SelectableAddressBox`**: Card địa chỉ có radio button
+-   **`SelectableAddressBoxGroup`**: Group các SelectableAddressBox
+
+#### Success Page
+
+-   **`SuccessCheckmark`**: Animated checkmark icon sau khi đặt hàng thành công
+-   **`SuccessHeader`**: Header hiển thị order info và confirmation
+-   **`OrderItem`**: Card sản phẩm trong order summary
+-   **`OrderTable`**: Bảng chi tiết các sản phẩm đã đặt
+-   **`PriceDetails`**: Chi tiết giá: subtotal, shipping, discount, total
+-   **`ShippingAddress`**: Card địa chỉ giao hàng
+
+#### Tracking (`tracking/`)
+
+-   **`TrackingProgress`**: Timeline hiển thị trạng thái đơn hàng
+-   **`TrackingHistory`**: Lịch sử các bước tracking (đã đặt, đang giao, đã nhận...)
+-   **`OrderDetailsCard`**: Card thông tin tổng quan đơn hàng
+-   **`OrderDetails`**: Chi tiết đơn hàng đầy đủ (products, price, address)
+
+---
+
+### ⭐ Review (`features/review`)
+
+-   **`ReviewBox`**: Tổng quan đánh giá với rating, phân bố sao, filter
+-   **`ReviewItem`**: Card đánh giá với avatar, rating, nội dung, ảnh, reply
+-   **`ReviewPeople`**: Danh sách ReviewItem
+-   **`RatingList`**: Phân bố rating (5 sao: x%, 4 sao: y%...)
+-   **`ProductReview`**: Card sản phẩm chờ đánh giá
+-   **`StoreReview`**: Card cửa hàng chờ đánh giá
+
+---
+
+### 🏪 Store (`features/store`)
+
+-   **`StoreBox`**: Card cửa hàng với logo, tên, rating, nút theo dõi
+-   **`StoreInfo`**: Thông tin chi tiết: banner, logo, tên, rating, địa chỉ
+-   **`StoreMenu`**: Menu navigation trong trang cửa hàng
+-   **`SearchStore`**: Tìm kiếm cửa hàng
+-   **`CircleLogo`**: Logo cửa hàng dạng tròn
+-   **`StoreAdItem`**: Item quảng cáo cửa hàng
+-   **`StoreAds`**: Section quảng cáo
+-   **`StoreAds.client`**: Client logic cho ads
+
+#### Store Tabs (`store/tab`)
+
+##### V1 Tabs
+
+-   **`HomeTab`**: Tab trang chủ
+-   **`ProductTab`**: Tab sản phẩm
+-   **`FlashsaleTab`**: Tab flash sale
+-   **`PromoTab`**: Tab khuyến mãi
+-   **`NewsTab`**: Tab tin tức
+-   **`ReviewTab`**: Tab đánh giá
+-   **`ContactTab`**: Tab liên hệ
+
+##### V2 Tabs
+
+-   **`ProductTabV2`**: V2 với SortBox và Pagination
+-   **`FlashsaleTabV2`**: V2 với time slots
+-   **`PromoTabV2`**: V2 với Swiper slider
+-   **`NewsTabV2`**: V2 với grid layout
+-   **`ReviewTabV2`**: V2 với SectionHeaderV2
+
+---
+
+### 🎟️ Voucher (`features/voucher`)
+
+-   **`VoucherItem`**: Card voucher
+-   **`ModalVoucherItem`**: Item voucher trong modal
+-   **`PromotionItem`**: Card khuyến mãi
+-   **`ButtonGetAllModalVoucher`**: Nút lấy tất cả voucher
+-   **`BankSection`**: Section ngân hàng
+-   **`BankSection.client`**: Client logic
+
+---
+
+### 📰 News (`features/news`)
+
+-   **`NewsItem`**: Card tin tức với ảnh, tiêu đề, ngày
+-   **`NewsBlogItem`**: Card blog item
+-   **`NewItemHorizontal`**: Card tin tức ngang
+-   **`NewsItemHasAuthor`**: Card với thông tin tác giả
+-   **`NewsSection`**: Section tin tức V1
+-   **`NewsBlogSection`**: Section blog V1
+-   **`NewsSectionV2`**: V2 với Swiper slider
+-   **`NewsBlogSectionV2`**: V2 với CustomSectionV2
+-   **`NewsHasAuthorSection`**: Section có author
+-   **`NewsHasAuthorSectionV2`**: V2 variant
+-   **`FeaturedNewsBlogSectionV2`**: Featured blog V2
+-   **`FeaturedNewsBlogSectionV2.client`**: Client component
+
+---
+
+### 🔧 Header (`features/header`)
+
+-   **`Header`**: Header chính (customers)
+-   **`HeaderTop`**: Top bar với logo, search, cart, user
+-   **`HeaderStore`**: Header cho store/shop
+-   **`HeaderStoreAuth`**: Header cho auth store
+-   **`HeaderNavLeft`**: Navigation trái
+-   **`HeaderSearchMain`**: Search bar chính
+-   **`HeaderGradient`**: Header với gradient effect
+-   **`NavTop`**: Navigation bar chính
+-   **`NavTopStore`**: Nav bar cho store
+-   **`NavTopCategoryItem`**: Item category trong nav
+-   **`NavTopCategoryDropdown`**: Dropdown danh mục
+-   **`RightSideNavTop`**: Phần phải nav (cart, notification, user)
+-   **`StoreAuthHover`**: Dropdown hover auth store
+-   **`VerticalNavigation`**: Navigation dọc với categories
+-   **`VerticalNavigationItem`**: Item trong vertical nav, mega menu
+-   **`Dropdown4ColMega`**: Mega menu 4 cột
+-   **`DropdownColMega`**: Mega menu theo cột
+-   **`DropdownCol`**: Dropdown đơn giản
+-   **`DropdownMegaItem`**: Item trong mega với badge
+-   **`DropdownItem`**: Item đơn với link
+-   **`DropdownSubmenu`**: Submenu lồng nhau
+-   **`LocationSearchBox`**: Search chọn vị trí giao hàng
+
+---
+
+### 🦶 Footer (`features/footer`)
+
+-   **`Footer`**: Footer cơ bản
+-   **`FooterV2`**: V2 với layout cải tiến
+-   **`FooterHasServices`**: Footer có section dịch vụ
+-   **`FooterWithEmail`**: Footer có newsletter
+-   **`MiniFooter`**: Footer thu gọn
+-   **`SubFooter`**: Sub footer
+
+---
+
+### 📱 Mobile (`features/mobile`)
+
+-   **`HeaderNavMobile`**: Header mobile với hamburger
+-   **`HeaderNavMiddleMobile`**: Middle section mobile
+-   **`Menu`**: Menu sidebar mobile
+
+---
+
+### 🗂️ Sidebar (`features/sidebar`)
+
+-   **`DashboardLeftSidebar`**: Sidebar dashboard/account
+-   **`DashboardLeftSidebarItem`**: Item menu trong sidebar
+-   **`SidebarCategories`**: Sidebar categories
+
+---
+
+### 🎭 Modal (`features/modal`)
+
+-   **`Modal`**: Modal wrapper tổng quát
+-   **`ModalAddReview`**: Modal thêm đánh giá
+-   **`ModalChooseAddress`**: Modal chọn địa chỉ
+-   **`ModalChooseVoucher`**: Modal chọn voucher
+-   **`ModalSaveAddress`**: Modal thêm/sửa địa chỉ
+-   **`ModalStore`**: Modal thông tin cửa hàng
+-   **`ModalStoreItem`**: Item cửa hàng trong modal
+-   **`ModalUpdateProfile`**: Modal cập nhật profile
+-   **`ModalChangePassword`**: Modal đổi mật khẩu
+-   **`ModalLogin`**: Modal đăng nhập nhanh
+-   **`ModalConfirmDelete`**: Modal xác nhận xóa
+-   **`ModalLocationSearchBox`**: Modal search location
+-   **`ModalDealToday`**: Modal deal hôm nay
+
+---
+
+### ❓ Help (`features/help`)
+
+-   **`HelpCard`**: Card category help với SVG icon
+-   **`FaqAccordionItem`**: Item accordion FAQ
+-   **`SearchDropdown`**: Dropdown tìm kiếm với animation
+
+---
+
+### 🔗 Provider (`features/provider`)
+
+-   **`AuthProvider`**: Context quản lý auth (user, hasAuth, cart, wishlist)
+-   **`ConfigProvider`**: Context quản lý config site
+-   **`useConfig`**: Hook sử dụng ConfigContext
+
+---
+
+## 🎨 UI Components
+
+### Buttons (`ui/button`)
+
+-   **`GridOption`**: Nút chuyển grid (2/3/4/6 columns)
+-   **`SortBox`**: Dropdown sắp xếp
+-   **`TrashIconButton`**: Nút xóa với confirm
+-   **`WishListButton`**: Nút wishlist với tooltip
+-   **`CartButton`**: Nút giỏ hàng với badge
+-   **`LanguageSwitcher`**: Chuyển ngôn ngữ
+-   **`DropdownSelectButtonCurrencies`**: Dropdown tiền tệ
+-   **`DropdownSelectButtonLangs`**: Dropdown ngôn ngữ
+-   **`DropdownSelectButtonItem`**: Item dropdown
+-   **`VariantSelectOptions`**: Dropdown variant
+-   **`VariantRectangleOptions`**: Variant hình chữ nhật
+-   **`VariantRadioOptions`**: Variant radio
+-   **`VariantCircleOptions`**: Variant hình tròn (màu)
+
+### Icons (`ui/icons`)
+
+-   **`User`**: Icon user
+-   **`Flash`**: Icon flash sale
+-   **`Shop`**: Icon shop
+-   **`Store`**: Icon store
+-   **`LordIcon`**: Wrapper LordIcon animations
+
+### Badge (`ui/badge`)
+
+-   **`NewBadge`**: Badge "New"
+-   **`WarningBadge`**: Badge cảnh báo màu vàng
+-   **`DangerBadge`**: Badge nguy hiểm màu đỏ
+
+### Other UI
+
+-   **`Pagination`**: Component phân trang
+-   **`SectionHeader`**: Header section V1
+-   **`SectionHeaderV2`**: V2 với typography tối ưu
+-   **`SectionHeaderV3`**: V3 với category tabs và URL state
+-   **`CustomSection`**: Section wrapper V1
+-   **`CustomSectionV2`**: V2 với animation mượt
+-   **`CustomSectionV3`**: V3 với URL filtering
+-   **`CustomSection3ItemsVerticalV2`**: 3 items vertical V2
+-   **`CustomSection3ItemsVerticalV2.client`**: Client component
+-   **`TimingBox`**: Box đếm ngược (giờ:phút:giây)
+-   **`TimingBoxDHMS`**: Box đếm ngược (ngày:giờ:phút:giây)
+-   **`CountdownTimer`**: Countdown với title
+-   **`BoxSpinner`**: Loading spinner
+-   **`LoadingSpinner`**: Spinner đơn giản
+-   **`CustomDropdown`**: Dropdown tùy chỉnh
+-   **`CustomFormCheck`**: Form checkbox/radio tùy chỉnh
+-   **`PriceRangeFilter`**: Slider chọn khoảng giá
+-   **`OnlyLeftLine`**: Progress bar đã bán/tồn kho
+-   **`ContactMail`**: Component contact mail
+-   **`ServiceSection`**: Section dịch vụ với SVG icons
+
+---
+
+## 📦 Component Versions
+
+### V1 Components
+
+**Đặc điểm**:
+
+-   ✅ Functionality cơ bản
+-   ✅ Local state management
+-   ✅ Standard UI
+
+**Khi nào dùng**:
+
+-   Dự án legacy ổn định
+-   Không cần animation phức tạp
+-   Bundle size không quan trọng
+
+**Key Components**:
+
+-   `VerticalProduct`
+-   `HorizontalProduct`
+-   `CustomSection`
+-   `SectionHeader`
+
+---
+
+### V2 Components
+
+**Đặc điểm**:
+
+-   ✅ Enhanced UI/UX
+-   ✅ Hover effects & smooth animations
+-   ✅ Better responsive
+-   ✅ Server/Client split
+-   ✅ Performance optimized (-10% bundle, -20% render time)
+
+**Khi nào dùng**:
+
+-   Cần UX hiện đại
+-   Performance quan trọng
+-   Dự án mới hoặc refactor
+-   Mobile & responsive priority
+
+**Key Components**:
+
+-   `VerticalProductHover` / `VerticalProductHoverV2`
+-   `HorizontalProductNoAction`
+-   `CustomSectionV2`
+-   `SectionHeaderV2`
+
+**Sections V2**:
+
+-   `VerticalNItemV2`
+-   `HorizontalNItemsSectionV2`
+-   `VerticalProductHoverSectionV2`
+-   `VerticalBookProductHoverSectionV2`
+-   `SimpleVerticalProductHoverSectionV2`
+-   `SimpleDealHoverV2`
+-   `DealHasCartButtonSectionV2`
+-   `RelatedProductSectionV2`
+-   `NewsSectionV2`
+-   `NewsBlogSectionV2`
+-   `SearchByCategoryV2`
+-   `SearchByCategoryHasActionV2`
+-   `BannerHoverSectionV2`
+-   `BannerSliderPaginationV2`
+
+**Store Tabs V2**:
+
+-   `ProductTabV2`
+-   `FlashsaleTabV2`
+-   `PromoTabV2`
+-   `NewsTabV2`
+-   `ReviewTabV2`
+
+---
+
+### V3 Components
+
+**Đặc điểm**:
+
+-   ✅ URL-based state management
+-   ✅ SEO optimized (server-side rendering)
+-   ✅ Category-based filtering
+-   ✅ Shareable URLs với state
+-   ✅ Server/Client separation
+
+**Khi nào dùng**:
+
+-   Cần SEO tốt
+-   Category filtering với tabs
+-   Shareable URLs (e.g., `/products?tab=vegetables`)
+-   Server-side initial content
+
+**Core Components**:
+
+#### `SectionHeaderV3`
+
+-   Client component với URL state
+-   Category tabs navigation
+-   Active state highlighting
+-   "All" tab xóa query param
+
+```typescript
+<SectionHeaderV3
+    title="Browse Products"
+    categories={categories}
+    hasIcon={true}
+/>
+```
+
+#### `CustomSectionV3` / `CustomSection3`
+
+-   Generic component `<T>`
+-   Auto filtering based on `?tab=` param
+-   useMemo optimization
+-   Re-render on tab change
+
+```typescript
+<CustomSectionV3<ProductT>
+    items={products}
+    categories={categories}
+    getCategorySlug={(p) => p.categorySlug}
+    renderItem={(p) => <VerticalProductHoverV3 product={p} />}
+/>
+```
+
+**Sections V3**:
+
+-   `VerticalProductHoverSectionV3` + `.client`
+-   `Vertical3ActionSectionV3` + `.client`
+-   `VerticalDigitalSectionV3` + `.client`
+-   `AllProductsVertical2Action2ItemV3` + `.client`
+
+**Pattern**: Server component fetch data → Pass to V3 client section
+
+```typescript
+// Server Component
+async function MySection() {
+    const categories = await getAllCategories();
+    const items = await getItems();
+
+    return (
+        <CustomSectionV3
+            items={items}
+            categories={categories}
+            getCategorySlug={(item) => item.categorySlug}
+            renderItem={(item) => <ItemCard item={item} />}
+        />
+    );
+}
+```
+
+**API Requirements**:
+
+-   `getAllCategories()` → `CategoryT[]`
+-   Items có `categorySlug` property
+
+**URL Behavior**:
+
+-   No param: Show all
+-   `?tab=all`: Show all
+-   `?tab=vegetables`: Filter by category
+
+---
+
+## 🎯 Best Practices
+
+### Component Selection Guide
+
+| Requirement              | Recommended Version |
+| ------------------------ | ------------------- |
+| Basic functionality      | V1                  |
+| Modern UX, animations    | V2                  |
+| SEO + Category filtering | V3                  |
+| Server-side data         | V2 / V3             |
+| URL state persistence    | V3                  |
+| High performance         | V2 / V3             |
+
+### Architecture Patterns
+
+#### Server/Client Split (V2/V3)
+
+```typescript
+// ComponentName.tsx (Server)
+async function Component() {
+    const data = await fetchData();
+    return <ComponentClient data={data} />;
+}
+
+// ComponentName.client.tsx (Client)
+("use client");
+function ComponentClient({ data }) {
+    const [state, setState] = useState();
+    // Client logic...
+}
+```
+
+#### Generic Section Component
+
+```typescript
+<CustomSectionV2<ProductT>
+    items={products}
+    renderItem={(product) => <ProductCard product={product} />}
+    breakpoints={{
+        320: { slidesPerView: 2 },
+        768: { slidesPerView: 4 },
+        1280: { slidesPerView: 6 },
+    }}
+/>
+```
+
+### Performance Tips
+
+-   **Image Optimization**: Next.js Image với lazy loading
+-   **Code Splitting**: Dynamic imports cho heavy components
+-   **Memoization**: React.memo, useMemo cho filtering
+-   **Virtual Scrolling**: Cho danh sách dài
+-   **Server Components**: Pre-fetch data for faster initial load
+
+### Styling
+
+-   Utility classes (Tailwind/Bootstrap)
+-   Component-specific styles in `public/styles/`
+-   Inline styles cho dynamic values
+-   `aspectRatio: "x/100"` cho ratio classes
+
+### State Management
+
+-   **Local**: useState
+-   **Global**: Context (AuthProvider, ConfigProvider)
+-   **Form**: Controlled components
+-   **URL**: useSearchParams + useRouter (V3)
+
+### Common Props Patterns
+
+```typescript
+// Product Component
+{
+  product: ProductT;
+  index?: number;
+  className?: string;
+  classNameImg?: string;
+}
+
+// Section Component
+{
+  items: T[];
+  title?: string;
+  description?: string;
+  hasNavigation?: boolean;
+  breakpoints?: {...};
+}
+
+// Modal Component
+{
+  isOpen?: boolean;
+  onClose: () => void;
+  onConfirm?: () => void;
+}
+```
+
+---
+
+## 📱 Responsive Design
+
+-   **Desktop**: Full layout, sidebar, grid 6 columns
+-   **Tablet**: Grid 3-4 columns, compact sidebar
+-   **Mobile**: Grid 2 columns, bottom nav, hamburger menu
+
+**Breakpoints**:
+
+-   320px: 2 items
+-   640px / 768px: 3-4 items
+-   1024px: 4-5 items
+-   1280px: 6 items
+
+---
+
+_Tài liệu Components - Cập nhật: January 2025_

@@ -1,0 +1,86 @@
+{
+    "common": {
+        "home": "Home",
+        "search": "Search",
+        "cart": "Cart",
+        "wishlist": "Wishlist",
+        "account": "Account"
+    },
+    "navigation": {
+        "home": "Home",
+        "products": "Products",
+        "categories": "Categories",
+        "deals": "Deals",
+        "contact": "Contact",
+        "about": "About"
+    },
+    "auth": {
+        "login": "Login",
+        "register": "Register",
+        "logout": "Logout",
+        "forgotPassword": "Forgot Password",
+        "loginTitle": "Login to Your Account",
+        "registerTitle": "Create Account",
+        "welcomeMessage": "Welcome to E-commerce Platform - HONEYNET Corporation",
+        "fullName": "Full Name",
+        "phone": "Phone Number",
+        "password": "Password",
+        "confirmPassword": "Confirm Password",
+        "referralCode": "Referral Code (Optional)",
+        "captcha": "Captcha Code",
+        "captchaLabel": "Captcha Code",
+        "rememberMe": "Remember me",
+        "agreeTerms": "I agree to the",
+        "termsAndConditions": "terms and conditions",
+        "privacyPolicy": "privacy policy",
+        "submit": "Submit",
+        "submitLogin": "Login",
+        "submitRegister": "Register",
+        "alreadyHaveAccount": "Already have an account?",
+        "dontHaveAccount": "Don't have an account?",
+        "phoneRequired": "Please enter phone number",
+        "phoneInvalid": "Please enter valid phone number",
+        "passwordRequired": "Please enter password",
+        "captchaRequired": "Please enter captcha code"
+    },
+    "products": {
+        "title": "Products",
+        "allProducts": "All Products",
+        "newArrivals": "New Arrivals",
+        "bestSellers": "Best Sellers",
+        "onSale": "On Sale",
+        "addToCart": "Add to Cart",
+        "buyNow": "Buy Now",
+        "viewDetails": "View Details",
+        "outOfStock": "Out of Stock",
+        "inStock": "In Stock",
+        "price": "Price",
+        "originalPrice": "Original Price",
+        "discount": "Discount"
+    },
+    "cart": {
+        "title": "Shopping Cart",
+        "emptyCart": "Your cart is empty",
+        "continuesShopping": "Continue Shopping",
+        "checkout": "Checkout",
+        "subtotal": "Subtotal",
+        "total": "Total",
+        "quantity": "Quantity",
+        "remove": "Remove",
+        "update": "Update"
+    },
+    "admin": {
+        "tables": "Tables Management",
+        "reservations": "Reservations Management",
+        "dashboard": "Dashboard",
+        "customers": "Customers",
+        "orders": "Orders",
+        "products": "Products",
+        "settings": "Settings"
+    },
+    "NotFound": {
+        "title": "Page Not Found",
+        "description": "The page you are looking for does not exist or has been moved.",
+        "backHome": "Back to Home"
+    }
+}

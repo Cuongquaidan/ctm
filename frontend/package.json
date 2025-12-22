@@ -1,0 +1,40 @@
+{
+    "name": "ctm-nextjs",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev -p 5173 --turbopack",
+        "build": "next build --turbopack",
+        "start": "next start -p 5173"
+    },
+    "dependencies": {
+        "@fortawesome/fontawesome-svg-core": "^7.1.0",
+        "@fortawesome/react-fontawesome": "^3.1.0",
+        "@lordicon/element": "^2.0.1",
+        "@lordicon/react": "^1.11.0",
+        "@reduxjs/toolkit": "^2.9.0",
+        "dotenv": "^8.2.0",
+        "framer-motion": "^12.23.24",
+        "lottie-web": "^5.13.0",
+        "lucide-react": "^0.545.0",
+        "next": "15.5.4",
+        "next-intl": "^4.3.12",
+        "rc-slider": "^10.0.0",
+        "react": "19.1.0",
+        "react-dom": "19.1.0",
+        "react-redux": "^9.2.0",
+        "react-select": "^5.10.2",
+        "react-toastify": "^11.0.5",
+        "swiper": "^12.0.3",
+        "yet-another-react-lightbox": "^3.25.0"
+    },
+    "devDependencies": {
+        "@tailwindcss/postcss": "^4",
+        "@types/node": "^20",
+        "@types/react": "^19",
+        "@types/react-dom": "^19",
+        "msw": "^2.12.4",
+        "tailwindcss": "^4",
+        "typescript": "^5"
+    }
+}

@@ -1,0 +1,86 @@
+{
+    "common": {
+        "home": "Trang chủ",
+        "search": "Tìm kiếm",
+        "cart": "Giỏ hàng",
+        "wishlist": "Yêu thích",
+        "account": "Tài khoản"
+    },
+    "navigation": {
+        "home": "Trang chủ",
+        "products": "Sản phẩm",
+        "categories": "Danh mục",
+        "deals": "Ưu đãi",
+        "contact": "Liên hệ",
+        "about": "Giới thiệu"
+    },
+    "auth": {
+        "login": "Đăng nhập",
+        "register": "Đăng ký",
+        "logout": "Đăng xuất",
+        "forgotPassword": "Quên mật khẩu",
+        "loginTitle": "Đăng nhập tài khoản",
+        "registerTitle": "Đăng ký tài khoản",
+        "welcomeMessage": "Chào mừng Anh Chị đến với Sàn thương mại điện tử - Công ty Cổ phần HONEYNET",
+        "fullName": "Họ và tên",
+        "phone": "Số điện thoại",
+        "password": "Mật khẩu",
+        "confirmPassword": "Xác nhận mật khẩu",
+        "referralCode": "Mã giới thiệu (nếu có)",
+        "captcha": "Mã xác thực",
+        "captchaLabel": "Mã xác thực",
+        "rememberMe": "Ghi nhớ đăng nhập",
+        "agreeTerms": "Tôi đồng ý với",
+        "termsAndConditions": "điều khoản và điều kiện",
+        "privacyPolicy": "chính sách bảo mật",
+        "submit": "Gửi thông tin",
+        "submitLogin": "Đăng nhập",
+        "submitRegister": "Đăng ký",
+        "alreadyHaveAccount": "Đã có tài khoản?",
+        "dontHaveAccount": "Chưa có tài khoản?",
+        "phoneRequired": "Vui lòng nhập số điện thoại",
+        "phoneInvalid": "Vui lòng nhập đúng định dạng số điện thoại",
+        "passwordRequired": "Vui lòng nhập mật khẩu",
+        "captchaRequired": "Vui lòng nhập mã xác thực"
+    },
+    "products": {
+        "title": "Sản phẩm",
+        "allProducts": "Tất cả sản phẩm",
+        "newArrivals": "Hàng mới về",
+        "bestSellers": "Bán chạy",
+        "onSale": "Đang giảm giá",
+        "addToCart": "Thêm vào giỏ",
+        "buyNow": "Mua ngay",
+        "viewDetails": "Xem chi tiết",
+        "outOfStock": "Hết hàng",
+        "inStock": "Còn hàng",
+        "price": "Giá",
+        "originalPrice": "Giá gốc",
+        "discount": "Giảm giá"
+    },
+    "cart": {
+        "title": "Giỏ hàng",
+        "emptyCart": "Giỏ hàng trống",
+        "continuesShopping": "Tiếp tục mua sắm",
+        "checkout": "Thanh toán",
+        "subtotal": "Tạm tính",
+        "total": "Tổng cộng",
+        "quantity": "Số lượng",
+        "remove": "Xóa",
+        "update": "Cập nhật"
+    },
+    "admin": {
+        "tables": "Quản lý bàn ăn",
+        "reservations": "Quản lý đặt bàn",
+        "dashboard": "Bảng điều khiển",
+        "customers": "Khách hàng",
+        "orders": "Đơn hàng",
+        "products": "Sản phẩm",
+        "settings": "Cài đặt"
+    },
+    "NotFound": {
+        "title": "Không Tìm Thấy Trang",
+        "description": "Trang bạn đang tìm kiếm không tồn tại hoặc đã bị di chuyển.",
+        "backHome": "Về Trang Chủ"
+    }
+}
