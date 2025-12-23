@@ -5,6 +5,8 @@ import Pagination from '@/components/ui/Pagination';
 import { getAllProducts } from '@/lib/api/product';
 import React from 'react'
 
+export const dynamic = 'force-dynamic';
+
 async function page({ searchParams }: { searchParams: { s?: string } }) {
   const search = await searchParams;
   const s = search.s || '';

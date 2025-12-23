@@ -3,6 +3,8 @@ import SearchStore from '@/components/features/store/SearchStore'
 import StoreInfo from '@/components/features/store/StoreInfo'
 import StoreMenu from '@/components/features/store/StoreMenu'
 import HomeTab from '@/components/features/store/tab/HomeTab'
+
+export const dynamic = 'force-dynamic';
 import FlashsaleTab from '@/components/features/store/tab/FlashsaleTab'
 import { getStoreBySlug } from '@/lib/api/store'
 import React from 'react'

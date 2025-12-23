@@ -3,6 +3,8 @@ import ProductInfo from '@/components/features/product/components/ProductInfo';
 import StoreBox from '@/components/features/store/StoreBox';
 import BreadcrumbBackToHome from '@/components/features/breadcrumb/BreadcrumbBackToHome';
 import { getProductByAlias } from '@/lib/api/product';
+
+export const dynamic = 'force-dynamic';
 import { getStoreById } from '@/lib/api/store';
 import React from 'react'
 import TabWrapper from '@/components/features/product/tab/TabWrapper';

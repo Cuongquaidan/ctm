@@ -3,6 +3,9 @@ import { apiFetchSites } from "@/lib/api/api";
 import { Metadata } from "next";
 import { mapParamsToComponents } from "@/lib/helper/mapParamsToComponents";
 import { BannerT } from "@/types/common.types";
+
+export const dynamic = 'force-dynamic';
+
 export const defaultBanner: BannerT = {
   "id": 1,
   "name": "Deal siêu hot",
