@@ -42,6 +42,7 @@ jobs:
                     --build-arg NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }} \
                     --build-arg NEXT_PUBLIC_BASE_URL_SITES=${{ secrets.NEXT_PUBLIC_API_URL }} \
                     --build-arg NEXT_PUBLIC_BASE_URL_CUSTOMERS=${{ secrets.NEXT_PUBLIC_API_URL }}/customers \
+                    --build-arg NEXT_PUBLIC_SECRET_KEY_CUSTOMERS=${{ secrets.NEXT_PUBLIC_SECRET_KEY_CUSTOMERS }} \
                     -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./frontend
                   docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
@@ -85,9 +86,36 @@ jobs:
                             MYSQL_USER: admin
                             MYSQL_PASSWORD: ${{ secrets.RDS_PASSWORD }}
                             MYSQL_DATABASE: ctm
+                            MYSQL_PORT: 3306
                             PORT: 3000
+                            NODE_ENV: "production"
+                            DEBUG: 1
                             APP_URL: ${{ secrets.APP_URL }}
-
+                            # Các URL nội bộ và public
+                            ADMIN_URI: "/adcp"
+                            ADMIN_URL: "http://3.27.84.46:13000/adcp"
+                            CUSTOMERS_URI: "/customers"
+                            CUSTOMERS_URL: "http://3.27.84.46:13000/customers"
+                            SITES_URI: ""
+                            SITES_URL: "http://3.27.84.46:13000"
+                            STATIC_URI: "/uploads"
+                            STATIC_URL: "http://3.27.84.46:13000/static"
+                            UPLOADS_URI: "/uploads"
+                            UPLOADS_URL: "http://3.27.84.46:13000/uploads"
+                            # --- Cấu hình JWT & Auth ---
+                            JWT_SECRET_KEY: "honeynet.vn"
+                            JWT_KEY: "honeynet.vn"
+                            JWT_CUSTOMER_KEY: "honeynet.vn"
+                            JWT_ISS: "honeynet.vn"
+                            JWT_AUD: "honeynet.vn"
+                            JWT_TIMEOUT: 3600
+                            JWT_CUSTOMER_TIMEOUT: 60
+                            JWT_REFRESH_TIMEOUT: 7
+                            # --- Google OAuth ---
+                            GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+                            GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+                            CALLBACK_URL: "http://3.27.84.46:13000/googleCallback"
+                            CALLBACK_URL_CUSTOMERS: "http://3.27.84.46:13000/customers/googleCallback"
                         frontend:
                           image: ${{ secrets.ECR_REGISTRY }}/self/ctm-frontend:latest
                           restart: always
