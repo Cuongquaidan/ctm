@@ -88,7 +88,7 @@ jobs:
                             MYSQL_PASSWORD: ${{ secrets.RDS_PASSWORD }}
                             MYSQL_DATABASE: ctm
                             MYSQL_PORT: 3306
-                            PORT: 13000
+                            PORT: 3000
                             NODE_ENV: "production"
                             DEBUG: 1
                             APP_URL: ${{ secrets.APP_URL }}
