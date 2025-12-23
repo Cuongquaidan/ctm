@@ -40,9 +40,10 @@ jobs:
               run: |
                   docker build \
                     --build-arg NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }} \
-                    --build-arg NEXT_PUBLIC_BASE_URL_SITES=${{ secrets.NEXT_PUBLIC_API_URL }} \
-                    --build-arg NEXT_PUBLIC_BASE_URL_CUSTOMERS=${{ secrets.NEXT_PUBLIC_API_URL }}/customers \
+                    --build-arg NEXT_PUBLIC_BASE_URL_SITES=${{ secrets.NEXT_PUBLIC_BASE_URL_SITES }} \
+                    --build-arg NEXT_PUBLIC_BASE_URL_CUSTOMERS=${{ secrets.NEXT_PUBLIC_BASE_URL_CUSTOMERS }} \
                     --build-arg NEXT_PUBLIC_SECRET_KEY_CUSTOMERS=${{ secrets.NEXT_PUBLIC_SECRET_KEY_CUSTOMERS }} \
+                    --build-arg NEXT_PUBLIC_IMAGES_BASE_URL=${{ secrets.NEXT_PUBLIC_IMAGES_BASE_URL }} \
                     -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./frontend
                   docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
@@ -93,15 +94,15 @@ jobs:
                             APP_URL: ${{ secrets.APP_URL }}
                             # Các URL nội bộ và public
                             ADMIN_URI: "/adcp"
-                            ADMIN_URL: "http://3.27.84.46:13000/adcp"
+                            ADMIN_URL: "${{ secrets.BACKEND_URL }}/adcp"
                             CUSTOMERS_URI: "/customers"
-                            CUSTOMERS_URL: "http://3.27.84.46:13000/customers"
+                            CUSTOMERS_URL: "${{ secrets.BACKEND_URL }}/customers"
                             SITES_URI: ""
-                            SITES_URL: "http://3.27.84.46:13000"
+                            SITES_URL: "${{ secrets.BACKEND_URL }}"
                             STATIC_URI: "/uploads"
-                            STATIC_URL: "http://3.27.84.46:13000/static"
+                            STATIC_URL: "${{ secrets.BACKEND_URL }}/static"
                             UPLOADS_URI: "/uploads"
-                            UPLOADS_URL: "http://3.27.84.46:13000/uploads"
+                            UPLOADS_URL: "${{ secrets.BACKEND_URL }}/uploads"
                             # --- Cấu hình JWT & Auth ---
                             JWT_SECRET_KEY: "honeynet.vn"
                             JWT_KEY: "honeynet.vn"
@@ -109,20 +110,24 @@ jobs:
                             JWT_ISS: "honeynet.vn"
                             JWT_AUD: "honeynet.vn"
                             JWT_TIMEOUT: 3600
-                            JWT_CUSTOMER_TIMEOUT: 60
+                            JWT_CUSTOMER_TIMEOUT: 3600
                             JWT_REFRESH_TIMEOUT: 7
                             # --- Google OAuth ---
                             GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
                             GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-                            CALLBACK_URL: "http://3.27.84.46:13000/googleCallback"
-                            CALLBACK_URL_CUSTOMERS: "http://3.27.84.46:13000/customers/googleCallback"
+                            CALLBACK_URL: "${{ secrets.BACKEND_URL }}/googleCallback"
+                            CALLBACK_URL_CUSTOMERS: "${{ secrets.BACKEND_URL }}/customers/googleCallback"
                         frontend:
                           image: ${{ secrets.ECR_REGISTRY }}/self/ctm-frontend:latest
                           restart: always
                           ports:
                             - "15173:5173"
                           environment:
-                            NEXT_PUBLIC_BASE_URL_CUSTOMERS: ${{ secrets.NEXT_PUBLIC_BASE_URL_CUSTOMERS}}
+                            NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+                            NEXT_PUBLIC_BASE_URL_SITES: ${{ secrets.NEXT_PUBLIC_BASE_URL_SITES }}
+                            NEXT_PUBLIC_BASE_URL_CUSTOMERS: ${{ secrets.NEXT_PUBLIC_BASE_URL_CUSTOMERS }}
+                            NEXT_PUBLIC_SECRET_KEY_CUSTOMERS: ${{ secrets.NEXT_PUBLIC_SECRET_KEY_CUSTOMERS }}
+                            NEXT_PUBLIC_IMAGES_BASE_URL: ${{ secrets.NEXT_PUBLIC_IMAGES_BASE_URL }}
                       EOF
 
                       echo "=== Stopping old containers ==="
