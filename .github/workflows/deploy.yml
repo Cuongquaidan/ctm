@@ -93,6 +93,8 @@ jobs:
                           restart: always
                           ports:
                             - "15173:5173"
+                          environment:
+                            NEXT_PUBLIC_BASE_URL_CUSTOMERS: ${{ secrets.NEXT_PUBLIC_BASE_URL_CUSTOMERS}}
                       EOF
 
                       echo "=== Stopping old containers ==="
