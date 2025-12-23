@@ -116,10 +116,10 @@ class App {
         const start = async () => {
             try {
                 await fastifyServer.listen({
-                    port: Number(process.env.PORT || 3000),
+                    port: Number(process.env.PORT),
                     host: "0.0.0.0",
                 });
-                console.log("Start server success at port 3000");
+                console.log(`Start server success at port ${process.env.PORT}`);
             } catch (err) {
                 fastifyServer.log.error(err);
                 process.exit(1);
